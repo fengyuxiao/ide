@@ -28,13 +28,16 @@ IDE::~IDE()
 void IDE::createActions()
 {
 //文件菜单动作
-    openFileAction = new QAction(QIcon("open.ico"),tr("打开"),this);                                //打开文件
+    openFileAction = new QAction(QIcon("open.ico"),tr("打开"),this);                                 //打开文件
     openFileAction -> setShortcut(tr("Ctrl+O"));
     openFileAction -> setStatusTip(tr("打开一个文件或项目"));
 
-    newFileAction = new QAction(QIcon("new.ico"),tr("新建"),this);                                  //新建文件
+    newFileAction = new QAction(QIcon("new.ico"),tr("新建"),this);                                   //新建文件
     newFileAction -> setShortcut(tr("Ctrl+N"));
-    newFileAction -> setStatusTip(tr("新建一个文件或项目"));
+    newFileAction -> setStatusTip(tr("新建一个文件"));
+
+    newProjectAction = new QAction(QIcon("project.ico"),tr("新建项目"),this);                        //新建项目
+    newProjectAction -> setStatusTip(tr("新建一个项目"));
 
     saveAction = new QAction(QIcon("save.ico"),tr("保存"),this);                                    //保存
     saveAction -> setShortcut(tr("Ctrl+S"));
@@ -47,7 +50,7 @@ void IDE::createActions()
     saveAllAction -> setShortcut(tr("Shift+Ctrl+S"));
     saveAllAction -> setStatusTip(tr("保存当前打开的所有文件"));
 
-    closeAction = new QAction(tr("关闭"),this);                                                     //关闭
+    closeAction = new QAction(tr("关闭"),this);                                                    //关闭
     closeAction -> setShortcut(tr("Ctrl+W"));
     closeAction -> setStatusTip(tr("关闭当前正在编辑的文件"));
 
@@ -55,10 +58,13 @@ void IDE::createActions()
     closeAllAction -> setShortcut(tr("Shift+Ctrl+W"));
     closeAllAction -> setStatusTip(tr("关闭当前打开的全部文件"));
 
+    currentFileAction = new QAction(QIcon("currentFile.ico"),tr("最近打开文件"),this);              //最近打开文件
+    currentFileAction -> setStatusTip(tr("显示最近所打开过的文件"));
+
     exitAction = new QAction(tr("退出"),this);                                                     //退出
     exitAction -> setShortcut(tr("Ctrl+Q"));
     exitAction -> setStatusTip(tr("退出集成开发环境"));
-    connect(exitAction,SIGNAL(triggered()),this,SLOT(exit()));
+    connect(exitAction,SIGNAL(triggered()),this,SLOT(close()));
 
 //编辑菜单动作
     revokeAction = new QAction(QIcon("revoke.ico"),tr("撤销"),this);                               //撤销
@@ -101,6 +107,76 @@ void IDE::createActions()
     replaceAction -> setShortcut(tr("Ctrl+H"));
     replaceAction -> setStatusTip(tr("将搜索到的文本替换为输入的文本"));
 
+//视图菜单动作
+    showConsoleAction = new QAction(QIcon("console.ico"),tr("显示控制台"),this);                    //显示控制台
+    showConsoleAction -> setStatusTip(tr("显示或关闭控制台"));
+
+    showStatusAction = new QAction(QIcon("status.ico"),tr("显示状态栏"),this);                      //显示状态栏
+    showStatusAction -> setStatusTip(tr("显示或关闭状态栏"));
+
+    showToolsAction = new QAction(QIcon("tool.ico"),tr("显示工具栏"),this);                         //显示工具栏
+    showToolsAction -> setStatusTip(tr("显示或关闭工具栏"));
+
+    showSourceAction = new QAction(QIcon("source.ico"),tr("显示资源管理器"),this);                   //显示资源管理器
+    showSourceAction -> setStatusTip(tr("显示或关闭资源管理器"));
+
+    showFullScreenAction = new QAction(QIcon("fullScreen.ico"),tr("全屏显示"),this);                //全屏显示
+    showFullScreenAction -> setShortcut(tr("Ctrl+F11"));
+    showFullScreenAction -> setStatusTip(tr("将文本编辑页面全屏显示"));
+
+//设置菜单动作
+    chooseEOrCAction = new QAction(tr("中/英文显示切换"),this);                                      //中英文显示切换
+    chooseEOrCAction -> setStatusTip(tr("切换中/英文显示界面"));
+
+    fontSetAction = new QAction(QIcon("font.ico"),tr("字体设置"),this);                             //字体设置
+    fontSetAction -> setStatusTip(tr("设置显示的字体和大小"));
+
+//工具菜单工作
+    compileAction = new QAction(QIcon("compile.ico"),tr("编译"),this);                             //编译
+    compileAction -> setShortcut(tr("F9"));
+    compileAction -> setStatusTip(tr("对当前编辑文件中的文本进行编译"));
+
+    runAction = new QAction(QIcon("run.ico"),tr("运行"),this);                                     //运行
+    runAction -> setShortcut(tr("F10"));
+    runAction -> setStatusTip(tr("运行文本中的C语言源代码"));
+
+    compileRunAction = new QAction(QIcon("compileRun.ico"),tr("编译运行"),this);                    //编译运行
+    compileRunAction -> setShortcut(tr("F11"));
+    compileRunAction -> setStatusTip(tr("对当前编辑文件中的文本进行编译并运行文本中的源代码"));
+
+    compileAllAction = new QAction(QIcon("compileAll.ico"),tr("全部编译"),this);                    //全部编译
+    compileAllAction -> setShortcut(tr("F12"));
+    compileAllAction -> setStatusTip(tr("对所有打开文件中的文本进行编译"));
+
+    startDebugAction = new QAction(QIcon("start.ico"),tr("开始调试"),this);                         //开始调试
+    startDebugAction -> setShortcut(tr("F5"));
+    startDebugAction -> setStatusTip(tr("对文本开始进行调试"));
+
+    endDebugAction = new QAction(QIcon("end.ico"),tr("结束调试"),this);                             //结束调试
+    endDebugAction -> setStatusTip(tr("关闭调试器"));
+
+    setBreakAction = new QAction(QIcon("setBreak.ico"),tr("设置断点"),this);                        //设置断点
+    setBreakAction -> setStatusTip(tr("在文本中添加一个断点"));
+
+    cancelBreakAction = new QAction(QIcon("cancelBreak.ico"),tr("取消断点"),this);                  //取消断点
+    cancelBreakAction -> setStatusTip(tr("取消一个在文本中设置的断点"));
+
+    nextStepAction = new QAction(QIcon("next.ico"),tr("下一步"),this);                              //下一步
+    nextStepAction -> setShortcut(tr("F7"));
+    nextStepAction -> setStatusTip(tr("执行下一条语句"));
+
+    turnNextBreakAction = new QAction(QIcon("turnNext.ico"),tr("跳到下一个断点"),this);              //跳到下一个断点
+    turnNextBreakAction -> setStatusTip(tr("使程序运行到下一个断点所在行"));
+
+    enterAction = new QAction(QIcon("enter"),tr("单步进入"),this);                                  //单步进入
+    enterAction -> setStatusTip(tr("进入函数体内部"));
+
+    jumpAction = new QAction(QIcon("jump"),tr("跳出"),this);                                       //跳出
+    jumpAction -> setStatusTip(tr("从函数体内部跳出"));
+
+    addWatchAction = new QAction(QIcon("add.ico"),tr("添加查看"),this);                             //添加查看
+    addWatchAction -> setStatusTip(tr("添加需要查看的变量名"));
+
 //帮助菜单动作
     helpDocAction = new QAction(QIcon("helpDoc.ico"),tr("帮助文档"),this);                          //帮助文档
     helpDocAction -> setStatusTip(tr("打开记录软件使用方法的文档"));
@@ -116,12 +192,15 @@ void IDE::createMenus()
     fileMenu = menuBar() -> addMenu(tr("文件"));
     fileMenu -> addAction(openFileAction);
     fileMenu -> addAction(newFileAction);
+    fileMenu -> addAction(newProjectAction);
     fileMenu -> addAction(saveAction);
     fileMenu -> addAction(saveAllAction);
     fileMenu -> addAction(saveAsAction);
     fileMenu -> addSeparator();
     fileMenu -> addAction(closeAction);
     fileMenu -> addAction(closeAllAction);
+    fileMenu -> addSeparator();
+    fileMenu -> addAction(currentFileAction);
     fileMenu -> addSeparator();
     fileMenu -> addAction(exitAction);
 
@@ -143,12 +222,36 @@ void IDE::createMenus()
 
 //视图菜单
     viewMenu = menuBar() -> addMenu(tr("视图"));
+    viewMenu -> addAction(showConsoleAction);
+    viewMenu -> addAction(showStatusAction);
+    viewMenu -> addAction(showToolsAction);
+    viewMenu -> addAction(showSourceAction);
+    viewMenu -> addSeparator();
+    viewMenu -> addAction(showFullScreenAction);
 
 //设置菜单
     settingMenu = menuBar() -> addMenu(tr("设置"));
+    settingMenu -> addAction(chooseEOrCAction);
+    settingMenu -> addAction(fontSetAction);
 
 //工具菜单
     toolMenu = menuBar() -> addMenu(tr("工具"));
+    toolMenu -> addAction(compileAction);
+    toolMenu -> addAction(runAction);
+    toolMenu -> addAction(compileRunAction);
+    toolMenu -> addAction(compileAllAction);
+    toolMenu -> addSeparator();
+    toolMenu -> addAction(startDebugAction);
+    toolMenu -> addAction(endDebugAction);
+    toolMenu -> addSeparator();
+    toolMenu -> addAction(setBreakAction);
+    toolMenu -> addAction(cancelBreakAction);
+    toolMenu -> addSeparator();
+    toolMenu -> addAction(nextStepAction);
+    toolMenu -> addAction(turnNextBreakAction);
+    toolMenu -> addAction(enterAction);
+    toolMenu -> addAction(jumpAction);
+    toolMenu -> addAction(addWatchAction);
 
 //帮助菜单
     helpMenu = menuBar() -> addMenu(tr("帮助"));
@@ -167,6 +270,7 @@ void IDE::createToolBars()
     fileTool -> addAction(saveAllAction);
     fileTool -> addAction(saveAsAction);
     fileTool -> addAction(closeAllAction);
+    fileTool -> setMovable(false);
 
 //编辑工具栏
     editTool = addToolBar("Edit");
@@ -175,16 +279,52 @@ void IDE::createToolBars()
     editTool -> addAction(copyAction);
     editTool -> addAction(cutAction);
     editTool -> addAction(pasteAction);
+    editTool -> setMovable(false);
 
 //搜索工具栏
     searchTool = addToolBar("Search");
     searchTool -> addAction(seekAction);
     searchTool -> addAction(replaceAction);
+    searchTool -> setMovable(false);
+
+//视图工具栏
+    viewTool = addToolBar("View");
+    viewTool -> addAction(showConsoleAction);
+    viewTool -> addAction(showStatusAction);
+    viewTool -> addAction(showToolsAction);
+    viewTool -> setMovable(false);
+
+//设置工具栏
+    settingTool = addToolBar("Setting");
+    settingTool -> addAction(fontSetAction);
+    settingTool -> setMovable(false);
+
+//编译工具栏
+    compileTool = addToolBar("Compile");
+    compileTool -> addAction(compileAction);
+    compileTool -> addAction(compileAllAction);
+    compileTool -> addAction(runAction);
+    compileTool -> addAction(compileRunAction);
+    compileTool -> setMovable(false);
+
+//调试工具栏
+    debugTool = addToolBar("Debug");
+    debugTool -> addAction(startDebugAction);
+    debugTool -> addAction(endDebugAction);
+    debugTool -> addAction(setBreakAction);
+    debugTool -> addAction(cancelBreakAction);
+    debugTool -> addAction(nextStepAction);
+    debugTool -> addAction(turnNextBreakAction);
+    debugTool -> addAction(enterAction);
+    debugTool -> addAction(jumpAction);
+    debugTool -> addAction(addWatchAction);
+    debugTool -> setMovable(false);
 
 //帮助工具栏
     helpTool = addToolBar("Help");
     helpTool -> addAction(helpDocAction);
     helpTool -> addAction(aboutAction);
+    helpTool -> setMovable(false);
 
 }
 
