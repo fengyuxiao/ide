@@ -1,4 +1,4 @@
-#include "ide.h"
+﻿#include "ide.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])

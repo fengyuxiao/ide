@@ -13,7 +13,12 @@
 #include <QToolBar>
 #include <QMouseEvent>
 #include <QFontComboBox>
+#include <QUndoCommand>
 #include <QToolButton>
+#include <QFileDialog>
+#include <QFile>
+#include <QTextStream>
+
 #include "showwidget.h"
 #pragma execution_character_set("utf-8");
 
@@ -27,6 +32,7 @@ public:
     void createActions();
     void createToolBars();
     void createMenus();
+
     void loadFile(QString filename);
     void mergeFormat(QTextCharFormat);
 
@@ -48,7 +54,6 @@ private:
 //文件菜单栏
     QAction *openFileAction;               //打开
     QAction *newFileAction;                //新建文件
-    QAction *newProjectAction;             //新建项目
     QAction *saveAction;                   //保存
     QAction *saveAsAction;                 //另存为
     QAction *saveAllAction;                //全部保存
@@ -109,6 +114,11 @@ private:
     QToolBar *compileTool;                 //编译
     QToolBar *debugTool;                   //调试
     QToolBar *helpTool;                    //帮助
+
+signals:
+
+protected slots:
+    void showOpenFile();
 };
 
 

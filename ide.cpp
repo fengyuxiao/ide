@@ -8,7 +8,8 @@ IDE::IDE(QWidget *parent)
     showWidget = new ShowWidget(this);
     setCentralWidget(showWidget);
 
-    this->setWindowIcon(QIcon("title.ico"));
+    this -> setWindowIcon(QIcon("title.ico"));
+    this -> resize(QSize(1300,900));
 
     createActions();                            //创建动作
     createMenus();                              //创建菜单
@@ -28,16 +29,14 @@ IDE::~IDE()
 void IDE::createActions()
 {
 //文件菜单动作
-    openFileAction = new QAction(QIcon("open.ico"),tr("打开"),this);                                 //打开文件
+    openFileAction = new QAction(QIcon("open.ico"),tr("打开"),this);                                //打开文件
     openFileAction -> setShortcut(tr("Ctrl+O"));
     openFileAction -> setStatusTip(tr("打开一个文件或项目"));
+    connect(openFileAction,SIGNAL(triggered()),this,SLOT(showOpenFile()));
 
-    newFileAction = new QAction(QIcon("new.ico"),tr("新建"),this);                                   //新建文件
+    newFileAction = new QAction(QIcon("new.ico"),tr("新建"),this);                                  //新建文件
     newFileAction -> setShortcut(tr("Ctrl+N"));
     newFileAction -> setStatusTip(tr("新建一个文件"));
-
-    newProjectAction = new QAction(QIcon("project.ico"),tr("新建项目"),this);                        //新建项目
-    newProjectAction -> setStatusTip(tr("新建一个项目"));
 
     saveAction = new QAction(QIcon("save.ico"),tr("保存"),this);                                    //保存
     saveAction -> setShortcut(tr("Ctrl+S"));
@@ -70,10 +69,12 @@ void IDE::createActions()
     revokeAction = new QAction(QIcon("revoke.ico"),tr("撤销"),this);                               //撤销
     revokeAction -> setShortcut(tr("Ctrl+Z"));
     revokeAction -> setStatusTip(tr("撤销上一步进行的操作"));
+    connect(revokeAction,SIGNAL(triggered()),showWidget -> text,SLOT(undo()));
 
     recoveryAction = new QAction(QIcon("recovery.ico"),tr("恢复"),this);                           //恢复
     recoveryAction -> setShortcut(tr("Shift+Ctrl+Z"));
     recoveryAction -> setStatusTip(tr("恢复上一步被撤销的的操作"));
+    connect(recoveryAction,SIGNAL(triggered()),showWidget -> text,SLOT(redo()));
 
     copyAction = new QAction(QIcon("copy.ico"),tr("复制"),this);                                   //复制
     copyAction -> setShortcut(tr("Ctrl+C"));
@@ -92,7 +93,7 @@ void IDE::createActions()
 
     deleteAction = new QAction(tr("删除"),this);                                                   //删除
     deleteAction -> setShortcut(tr("Delete"));
-    deleteAction -> setStatusTip(tr("删除当前光标所在位置前的一个字符"));
+    deleteAction -> setStatusTip(tr("删除所选中的文本内容"));
 
     allPickAction = new QAction(tr("全选"),this);                                                  //全选
     allPickAction -> setShortcut(tr("Ctrl+A"));
@@ -192,7 +193,6 @@ void IDE::createMenus()
     fileMenu = menuBar() -> addMenu(tr("文件"));
     fileMenu -> addAction(openFileAction);
     fileMenu -> addAction(newFileAction);
-    fileMenu -> addAction(newProjectAction);
     fileMenu -> addAction(saveAction);
     fileMenu -> addAction(saveAllAction);
     fileMenu -> addAction(saveAsAction);
@@ -328,3 +328,30 @@ void IDE::createToolBars()
 
 }
 
+void IDE::showOpenFile()
+{
+    fileName = QFileDialog::getOpenFileName(this);
+    if(!fileName.isEmpty())
+    {
+        if(showWidget -> text -> document() -> isEmpty())
+        {
+            loadFile(fileName);
+        }
+    }
+}
+
+void IDE::loadFile(QString filename)
+{
+    printf("file name:%s\n",filename.data());
+    QFile file(filename);
+    if(file.open(QIODevice::ReadOnly|QIODevice::Text))
+    {
+        QTextStream textStream(&file);
+        while(!textStream.atEnd())
+        {
+            showWidget -> text -> append(textStream.readLine());
+            printf("read line\n");
+        }
+        printf("end\n");
+    }
+}
