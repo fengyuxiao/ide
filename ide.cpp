@@ -1,10 +1,12 @@
 ﻿#include "ide.h"
+
 #pragma execution_character_set("utf-8");
 
 IDE::IDE(QWidget *parent)
     : QMainWindow(parent)
 {
     setWindowTitle(tr("C语言集成开发环境"));
+
     showWidget = new ShowWidget(this);
     setCentralWidget(showWidget);
 
@@ -14,6 +16,7 @@ IDE::IDE(QWidget *parent)
     createActions();                            //创建动作
     createMenus();                              //创建菜单
     createToolBars();                           //创建工具栏
+    createStatus();                             //创建状态栏
 
     if(img.load("image.png"))
     {
@@ -98,6 +101,7 @@ void IDE::createActions()
     allPickAction = new QAction(tr("全选"),this);                                                  //全选
     allPickAction -> setShortcut(tr("Ctrl+A"));
     allPickAction -> setStatusTip(tr("选中当前编辑文件中的所有文本"));
+    connect(allPickAction,SIGNAL(triggered()),showWidget -> text,SLOT(selectAll()));
 
 //搜索菜单动作
     seekAction = new QAction(QIcon("seek.ico"),tr("查找"),this);                                   //查找
@@ -294,11 +298,6 @@ void IDE::createToolBars()
     viewTool -> addAction(showToolsAction);
     viewTool -> setMovable(false);
 
-//设置工具栏
-    settingTool = addToolBar("Setting");
-    settingTool -> addAction(fontSetAction);
-    settingTool -> setMovable(false);
-
 //编译工具栏
     compileTool = addToolBar("Compile");
     compileTool -> addAction(compileAction);
@@ -354,4 +353,29 @@ void IDE::loadFile(QString filename)
         }
         printf("end\n");
     }
+}
+
+void IDE::createStatus()
+{
+    QStatusBar *bar = statusBar();
+
+    firstStatus = new QLabel(this);
+    secondStatus = new QLabel(this);
+    thirdStatus = new QLabel(this);
+
+    firstStatus -> setMinimumSize(200,20);
+    firstStatus -> setFrameShape(QFrame::WinPanel);
+    firstStatus -> setFrameShadow(QFrame::Sunken);
+    bar -> addPermanentWidget(firstStatus);
+    firstStatus -> setText(tr("     Welcome  to  Quasar  TextEdit !    "));
+
+    secondStatus -> setMinimumSize(260,20);
+    bar -> addPermanentWidget(secondStatus);
+
+    thirdStatus -> setMinimumSize(150,20);
+    thirdStatus -> setFrameShape(QFrame::WinPanel);
+    thirdStatus -> setFrameShadow(QFrame::Sunken);
+    bar -> addPermanentWidget(thirdStatus);
+    thirdStatus -> setText(tr("     Version Number v1.0.1     "));
+
 }

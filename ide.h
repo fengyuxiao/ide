@@ -18,8 +18,16 @@
 #include <QFileDialog>
 #include <QFile>
 #include <QTextStream>
+#include <QTabWidget>
+#include <QLineEdit>
+#include <QMessageBox>
+#include <QStatusBar>
+#include <QApplication>
+#include <QKeySequence>
+#include <QTextCursor>
 
 #include "showwidget.h"
+
 #pragma execution_character_set("utf-8");
 
 class IDE : public QMainWindow
@@ -29,9 +37,11 @@ class IDE : public QMainWindow
 public:
     IDE(QWidget *parent = nullptr);
     ~IDE();
+
     void createActions();
     void createToolBars();
     void createMenus();
+    void createStatus();
 
     void loadFile(QString filename);
     void mergeFormat(QTextCharFormat);
@@ -110,10 +120,14 @@ private:
     QToolBar *editTool;                    //编辑
     QToolBar *searchTool;                  //搜索
     QToolBar *viewTool;                    //视图
-    QToolBar *settingTool;                 //设置
     QToolBar *compileTool;                 //编译
     QToolBar *debugTool;                   //调试
     QToolBar *helpTool;                    //帮助
+
+//状态栏
+    QLabel *firstStatus;
+    QLabel *secondStatus;
+    QLabel *thirdStatus;
 
 signals:
 
