@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2019-09-01T15:29:33
+# Project created by QtCreator 2019-09-07T14:13:14
 #
 #-------------------------------------------------
 
@@ -8,7 +8,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = IntegratedDevelopmentEnvironment
+TARGET = IDE
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -26,15 +26,18 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        ide.cpp
+        mainwindow.cpp \
+    showwidget.cpp
 
 HEADERS += \
-        ide.h
+        mainwindow.h \
+    showwidget.h
+
+FORMS += \
+        mainwindow.ui \
+    showwidget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
-FORMS +=
-
