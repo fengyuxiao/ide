@@ -46,7 +46,6 @@ MainWindow::MainWindow(Settings *settings,QWidget *parent) :
     setWindowTitle(tr("C语言集成开发环境"));
     this -> setWindowIcon(QIcon("Logo.ico"));
     this -> resize(1300,900);
-
 }
 
 MainWindow::~MainWindow()
