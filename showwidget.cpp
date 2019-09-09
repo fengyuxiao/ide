@@ -1,12 +1,19 @@
 ﻿#include "showwidget.h"
-#include <QHBoxLayout>
+#include "ui_showwidget.h"
 
-ShowWidget::ShowWidget(QWidget *parent) : QWidget(parent)
+showwidget::showwidget(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::showwidget)
 {
-    imageLabel = new QLabel;
-    imageLabel -> setScaledContents(true);
-    text = new QTextEdit;
-    QHBoxLayout *mainLayout = new QHBoxLayout(this);
-    mainLayout -> addWidget(imageLabel);
-    mainLayout -> addWidget(text);
+    ui->setupUi(this);
+}
+
+showwidget::~showwidget()
+{
+    delete ui;
+}
+
+void showwidget::goToLine()
+{
+
 }

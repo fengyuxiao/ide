@@ -2,23 +2,27 @@
 #define SHOWWIDGET_H
 
 #include <QWidget>
-#include <QLabel>
-#include <QTextEdit>
-#include <QImage>
 
-class ShowWidget : public QWidget
+namespace Ui {
+class showwidget;
+}
+
+class showwidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit ShowWidget(QWidget *parent = nullptr);
-    QImage img;
-    QLabel *imageLabel;
-    QTextEdit *text;
+    explicit showwidget(QWidget *parent = nullptr);
+    ~showwidget();
 
 signals:
+    void goToLine(int LineNum);           //跳转到行
 
-public slots:
+private slots:
+    void goToLine();                    //跳转到行
+
+private:
+    Ui::showwidget *ui;
 };
 
 #endif // SHOWWIDGET_H
