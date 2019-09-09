@@ -268,6 +268,124 @@ void MainWindow::createAction()
     aboutAction = new QAction(QIcon("about.ico"),tr("关于"),this);
     aboutAction -> setStatusTip(tr(""));
 
+    //xzl 帮助文档构建
+    connect(helpDocAction,&QAction::triggered,
+            [=]()
+            {
+                QDialog helpDocWin1;
+
+                QTextEdit *helpDocShow = new QTextEdit(&helpDocWin1);
+                helpDocShow->resize(600,400);
+                helpDocWin1.resize(600,400);
+                helpDocWin1.setMaximumSize(600,400);
+                helpDocWin1.setMinimumSize(600,400);
+
+//                QColorDialog color;//调出颜色选择器对话框
+//                QColor c = color.getRgba();
+                //调节背景颜色
+                QColor clr(255, 246, 240);
+                QString strClr = clr.name(); // "#RRGGBB"
+                QString strStyleSheet = QString("background-color: %1").arg( strClr );
+                helpDocShow->setStyleSheet( strStyleSheet );
+
+
+                helpDocShow->setReadOnly(true);
+                helpDocShow->setFontPointSize(15);
+                helpDocShow->setFontWeight(50);
+                helpDocShow->setAlignment(Qt::AlignCenter);
+                helpDocShow->setFont(QFont(tr("Cambria")));
+
+                helpDocShow->append("^_^");
+                helpDocShow->append("");
+                helpDocShow->append("");
+                helpDocShow->append("Welcome to our IDE:");
+                helpDocShow->append("");
+                helpDocShow->append("We are appreciate that you choose our product.");
+                helpDocShow->append("");
+                helpDocShow->append("Our IDE offers text editing ");
+                helpDocShow->append("");
+                helpDocShow->append("and compiling of C Programming Language.");
+                helpDocShow->append("");
+                helpDocShow->append("");helpDocShow->append("");
+                helpDocShow->append("Here are some Tips that may be helpful for you:");
+                helpDocShow->append("");
+                helpDocShow->append("YueHun");
+                helpDocShow->append("");helpDocShow->append("Xu Zhaoliang");
+                helpDocShow->append("");helpDocShow->append("Feng Yuxiao");
+                helpDocShow->append("");helpDocShow->append("Wen GuangBing");
+                helpDocShow->append("");helpDocShow->append("Lv Jiaming");
+                helpDocShow->append("");helpDocShow->append("");
+                helpDocShow->append("");helpDocShow->append("We create this in ths summer of 2019");
+                helpDocShow->append("");helpDocShow->append("and hope that it can give you some convince.");
+                helpDocShow->append("");helpDocShow->append("");
+                helpDocShow->append("Thanks for your interviewing!");
+                helpDocShow->append("");helpDocShow->append("");helpDocShow->append("");
+
+                helpDocShow->moveCursor(QTextCursor::Start);
+
+                helpDocWin1.show();
+                helpDocWin1.exec();
+            }
+            );
+    //xzl 关于文档构建
+    connect(aboutAction,&QAction::triggered,
+            [=]()
+            {
+                QDialog helpDocWin1;
+
+                QTextEdit *helpDocShow = new QTextEdit(&helpDocWin1);
+                helpDocShow->resize(600,400);
+                helpDocWin1.resize(600,400);
+                helpDocWin1.setMaximumSize(600,400);
+                helpDocWin1.setMinimumSize(600,400);
+
+//                QColorDialog color;//调出颜色选择器对话框
+//                QColor c = color.getRgba();
+                //调节背景颜色
+                QColor clr(255, 246, 240);
+                QString strClr = clr.name(); // "#RRGGBB"
+                QString strStyleSheet = QString("background-color: %1").arg( strClr );
+                helpDocShow->setStyleSheet( strStyleSheet );
+
+
+                helpDocShow->setReadOnly(true);
+                helpDocShow->setFontPointSize(15);
+                helpDocShow->setFontWeight(50);
+                helpDocShow->setAlignment(Qt::AlignCenter);
+                helpDocShow->setFont(QFont(tr("Cambria")));
+
+                helpDocShow->append("^_^");
+                helpDocShow->append("");
+                helpDocShow->append("");
+                helpDocShow->append("Welcome to our IDE:");
+                helpDocShow->append("");
+                helpDocShow->append("We are appreciate that you choose our product.");
+                helpDocShow->append("");
+                helpDocShow->append("Our IDE offers text editing ");
+                helpDocShow->append("");
+                helpDocShow->append("and compiling of C Programming Language.");
+                helpDocShow->append("");
+                helpDocShow->append("");helpDocShow->append("");
+                helpDocShow->append("STAFF:");
+                helpDocShow->append("");
+                helpDocShow->append("YueHun");
+                helpDocShow->append("");helpDocShow->append("Xu Zhaoliang");
+                helpDocShow->append("");helpDocShow->append("Feng Yuxiao");
+                helpDocShow->append("");helpDocShow->append("Wen GuangBing");
+                helpDocShow->append("");helpDocShow->append("Lv Jiaming");
+                helpDocShow->append("");helpDocShow->append("");
+                helpDocShow->append("");helpDocShow->append("We create this in ths summer of 2019");
+                helpDocShow->append("");helpDocShow->append("and hope that it can give you some convince.");
+                helpDocShow->append("");helpDocShow->append("");
+                helpDocShow->append("Thanks for your interviewing!");
+                helpDocShow->append("");helpDocShow->append("");helpDocShow->append("");
+
+                helpDocShow->moveCursor(QTextCursor::Start);
+
+                helpDocWin1.show();
+                helpDocWin1.exec();
+            }
+            );
 }
 
 void MainWindow::createMenuBar()
