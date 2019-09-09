@@ -18,6 +18,8 @@
 #include "settings.h"
 #include "texttab.h"
 
+#pragma execution_character_set("utf-8")
+
 #define EDITOR   static_cast<TextTab *>(tabWidget->currentWidget())
 
 namespace Ui {
@@ -83,6 +85,7 @@ private:
 
 //工具栏设计
     QToolBar *toolBar;              //工具栏
+    QToolBar *fontBar;
 
 //操作设计
     //文件菜单操作
@@ -107,6 +110,10 @@ private:
 
     //设置菜单操作
     QAction *fontTypeAction;            //文本字体设置
+    QAction *fontBAction;
+    QAction *fontCAction;
+    QAction *fontIAction;
+    QAction *fontUAction;
 
     //搜索菜单操作
     QAction *searchAction;              //查找
@@ -140,25 +147,29 @@ private:
 public slots:
 
 private slots:
-    void currentChanged(int index); //tab发生改变时执行的槽
-    void modificationChanged(bool changed); //文档发生改变
-    void selectionChanged();    //文档选中状态发生改变
-    void openFile();    //打开文件
-    void openFile(QString FileName);    //打开文件
-    void newFile(); //新建文件
-    bool fileSaveAs(int index); //文件另存为（保存指定文件）
-    bool fileSave(int index);   //保存文件（保存指定文件）
-    bool fileSaveAs();  //文件另存为（保存当前文件）
-    bool fileSave();    //保存文件（保存当前文件）
-    bool fileSaveAll(); //保存所有文件
-    void fileClose(int index);   //关闭文件（指定文件）
-    void fileClose();   //关闭文件（当前文件）
-    void fileCloseAll();    //关闭所有文件
-
-    void textFont(); //设置文本字体
-    void textFontFamily(const QString& font); //设置文本字体（通过字体组合框）
+    void currentChanged(int index);
+    void modificationChanged(bool changed);
+    void selectionChanged();
+    void openFile();
+    void openFile(QString FileName);
+    void newFile();
+    bool fileSaveAs(int index);
+    bool fileSave(int index);
+    bool fileSave();
+    bool fileSaveAs();
+    bool fileSaveAll();
+    void fileClose(int index);
+    void fileClose();
+    void fileCloseAll();
 
     void judgeToolBars();
+    void textColor();
+    void textFont();
+    void textFontFamily(const QString& font);
+    void textSize(const QString &size);
+    void textStyle(int index);
+    void textStyle();
+    void updateTextStyleActs(QString style);
 
 };
 

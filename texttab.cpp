@@ -18,14 +18,10 @@ TextTab::TextTab(Settings *settings, QWidget *parent) :
     resetting();
 
     extraArea = new QWidget(this);
-    extraArea->installEventFilter(this);
-    extraArea->setCursor(Qt::PointingHandCursor);
+
 
     QPalette extraAreaPalette(palette());
     extraAreaPalette.setColor(QPalette::Background, QColor(30, 60, 90));
-
-    extraArea->setPalette(extraAreaPalette);
-    extraArea->setAutoFillBackground(true);
 
     setLineWrapMode(QPlainTextEdit::NoWrap);
     setCursorWidth(2);
@@ -33,14 +29,14 @@ TextTab::TextTab(Settings *settings, QWidget *parent) :
     setMouseTracking(true);
 
     QPalette plt = palette();
-    plt.setColor(QPalette::Highlight, Qt::yellow);
-    plt.setColor(QPalette::HighlightedText, Qt::blue);
+    plt.setColor(QPalette::Highlight, Qt::blue);
+    plt.setColor(QPalette::HighlightedText, Qt::white);
     setPalette(plt);
 
     connect(this, SIGNAL(cursorPositionChanged()), SLOT(ensureCursorVisible()));
     connect(this, SIGNAL(blockCountChanged(int)), SLOT(blockCountChanged(int)));
     connect(document(), SIGNAL(contentsChange(int, int, int)), SLOT(contentsChange(int, int, int)));
-    connect(settings, SIGNAL(reread(int)), SLOT(reconfig(int)));
+    connect(settings, SIGNAL(reread(int)), SLOT(resetting(int)));
     connect(this, SIGNAL(updateRequest(QRect, int)), extraArea, SLOT(update()));
 }
 
@@ -50,8 +46,7 @@ void TextTab::resizeEvent(QResizeEvent *event)
     lineNumWidth = FONTWIDTH * lineNumDigits;
     int width = lineNumWidth + foldBoxWidth + 2 * foldBoxIndent;
     setViewportMargins(width, 0, 0, 0);
-    extraArea->setGeometry(contentsRect().x(), contentsRect().y(), width,
-                           contentsRect().height());
+    extraArea->setGeometry(contentsRect().x(), contentsRect().y(), width,contentsRect().height());
 }
 
 void TextTab::paintEvent(QPaintEvent *event)
