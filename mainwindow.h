@@ -15,6 +15,10 @@
 #include <QtPrintSupport/QPrinter>
 
 #include "showwidget.h"
+#include "settings.h"
+#include "texttab.h"
+
+#define EDITOR   static_cast<TextTab *>(tabWidget->currentWidget())
 
 namespace Ui {
 class MainWindow;
@@ -25,20 +29,48 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(Settings *,QWidget *parent = nullptr);
     ~MainWindow();
 
 private:
     Ui::MainWindow *ui;
 
+    Settings *settings;
     QStringList openedFiles;
+    QComboBox *comboStyle;
+    QComboBox *comboSize;
+    QFontComboBox *comboFont;
+    QList<QAction *> recentFileActs;
+    QActionGroup *openedFilesGrp;
+
+    int newNumber;
 
 //创建主窗口
-    void createTab();                                           //初始化Tab编辑页
-    void createMenuBar();                                       //初始化菜单栏
-    void createToolBar();                                       //初始化工具栏
-    void createAction();                                        //初始化操作
-    void createNewTab(const QString & filename, QFile & file);      //创建新Tab页
+    void createinit();                                              //初始化
+    void createTab();                                               //初始化Tab编辑页
+    void createMenuBar();                                           //初始化菜单栏
+    void createToolBar();                                           //初始化工具栏
+    void createAction();                                            //初始化操作
+
+    bool maybeSave(int index);
+
+    void closeDuplicate(int index);
+    void closeEvent(QCloseEvent *event);
+    void createNewTab(const QString& fileName, QFile& file);
+    void mergeFormatOnWordOrSelection(const QTextCharFormat &format);
+    void currentCharFormatChanged(const QTextCharFormat &format);
+    void colorChanged(const QColor &col);
+    void fontChanged(const QFont &font);
+
+    void showReadme();
+    void updateActions();
+    void refreshActions();
+    void updateRecentFilesList();
+    void updateComboStyle();
+    void fillRecentFileActs();
+
+    void hideToolBars();
+    void showToolBars();
 
 //菜单栏设计
     QMenu *fileMenu;                //文件菜单
@@ -51,7 +83,6 @@ private:
 
 //工具栏设计
     QToolBar *toolBar;              //工具栏
-    QToolBar *fontBar;              //文本设置栏
 
 //操作设计
     //文件菜单操作
@@ -60,6 +91,7 @@ private:
     QAction *saveFileAction;                //保存
     QAction *saveAsFileAction;              //另存为
     QAction *saveAllFileAction;             //全部保存
+    QAction *exportFileAction;              //导出
     QAction *closeFileAction;               //关闭
     QAction *closeAllFileAction;            //全部关闭
     QAction *exitFileAction;                //退出
@@ -75,10 +107,6 @@ private:
 
     //设置菜单操作
     QAction *fontTypeAction;            //文本字体设置
-    QAction *fontColorAction;           //文本颜色设置
-    QAction *fontBoldAction;            //文本粗体设置
-    QAction *fontItalicAction;          //文本斜体设置
-    QAction *fontUnderlineAction;       //文本下划线设置
 
     //搜索菜单操作
     QAction *searchAction;              //查找
@@ -112,8 +140,25 @@ private:
 public slots:
 
 private slots:
-    void openFile();                            //打开文件
-    void openFile(QString filename);
+    void currentChanged(int index); //tab发生改变时执行的槽
+    void modificationChanged(bool changed); //文档发生改变
+    void selectionChanged();    //文档选中状态发生改变
+    void openFile();    //打开文件
+    void openFile(QString FileName);    //打开文件
+    void newFile(); //新建文件
+    bool fileSaveAs(int index); //文件另存为（保存指定文件）
+    bool fileSave(int index);   //保存文件（保存指定文件）
+    bool fileSaveAs();  //文件另存为（保存当前文件）
+    bool fileSave();    //保存文件（保存当前文件）
+    bool fileSaveAll(); //保存所有文件
+    void fileClose(int index);   //关闭文件（指定文件）
+    void fileClose();   //关闭文件（当前文件）
+    void fileCloseAll();    //关闭所有文件
+
+    void textFont(); //设置文本字体
+    void textFontFamily(const QString& font); //设置文本字体（通过字体组合框）
+
+    void judgeToolBars();
 
 };
 

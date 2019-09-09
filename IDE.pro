@@ -27,11 +27,15 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    showwidget.cpp
+    showwidget.cpp \
+    settings.cpp \
+    texttab.cpp
 
 HEADERS += \
         mainwindow.h \
-    showwidget.h
+    showwidget.h \
+    settings.h \
+    texttab.h
 
 FORMS += \
         mainwindow.ui \
@@ -41,3 +45,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    images.qrc
