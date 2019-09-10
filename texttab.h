@@ -13,6 +13,8 @@
 
 #include "settings.h"
 
+#pragma execution_character_set("utf-8")
+
 #define FOLDBOXRECT(cy) QRect(lineNumWidth + foldBoxIndent, cy - foldBoxWidth / 2, foldBoxWidth, foldBoxWidth)
 #define FULLRESIZE      resizeEvent(new QResizeEvent(QSize(0, 0), size()))
 #define FONTWIDTH       fontMetrics().width(QLatin1Char('X'))

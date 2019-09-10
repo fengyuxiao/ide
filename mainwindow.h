@@ -13,10 +13,13 @@
 #include <QFontComboBox>
 #include <QTextCharFormat>
 #include <QtPrintSupport/QPrinter>
+#include <QStatusBar>
 
 #include "showwidget.h"
 #include "settings.h"
 #include "texttab.h"
+
+#pragma execution_character_set("utf-8")
 
 #define EDITOR   static_cast<TextTab *>(tabWidget->currentWidget())
 
@@ -51,26 +54,26 @@ private:
     void createMenuBar();                                           //初始化菜单栏
     void createToolBar();                                           //初始化工具栏
     void createAction();                                            //初始化操作
+    void createEditor();
 
     bool maybeSave(int index);
 
-    void closeDuplicate(int index);
-    void closeEvent(QCloseEvent *event);
-    void createNewTab(const QString& fileName, QFile& file);
+    void closeDuplicate(int index);                                            //关闭已经打开重复打开的文件
+    void closeEvent(QCloseEvent *event);                                       //关闭事件
+    void createNewTab(const QString& fileName, QFile& file);                   //创新新窗口
     void mergeFormatOnWordOrSelection(const QTextCharFormat &format);
     void currentCharFormatChanged(const QTextCharFormat &format);
     void colorChanged(const QColor &col);
     void fontChanged(const QFont &font);
 
-    void showReadme();
-    void updateActions();
-    void refreshActions();
+    void updateActions();                           //更新操作状态
+    void refreshActions();                          //刷新操作
     void updateRecentFilesList();
     void updateComboStyle();
-    void fillRecentFileActs();
+    void fillRecentFileActs();                      //最近打开的文件列表
 
-    void hideToolBars();
-    void showToolBars();
+    void hideToolBars();                            //隐藏工具栏
+    void showToolBars();                            //显示工具栏
 
 //菜单栏设计
     QMenu *fileMenu;                //文件菜单
@@ -83,6 +86,7 @@ private:
 
 //工具栏设计
     QToolBar *toolBar;              //工具栏
+    QToolBar *fontBar;
 
 //操作设计
     //文件菜单操作
@@ -107,6 +111,10 @@ private:
 
     //设置菜单操作
     QAction *fontTypeAction;            //文本字体设置
+    QAction *fontBAction;
+    QAction *fontCAction;
+    QAction *fontIAction;
+    QAction *fontUAction;
 
     //搜索菜单操作
     QAction *searchAction;              //查找
@@ -137,28 +145,35 @@ private:
     //Tab文档
     QTabWidget *tabWidget;              //Tab编辑页
 
+    //关于信息
+    QLabel *messageLabel;               //信息标签
+
 public slots:
 
 private slots:
-    void currentChanged(int index); //tab发生改变时执行的槽
-    void modificationChanged(bool changed); //文档发生改变
-    void selectionChanged();    //文档选中状态发生改变
-    void openFile();    //打开文件
-    void openFile(QString FileName);    //打开文件
-    void newFile(); //新建文件
-    bool fileSaveAs(int index); //文件另存为（保存指定文件）
-    bool fileSave(int index);   //保存文件（保存指定文件）
-    bool fileSaveAs();  //文件另存为（保存当前文件）
-    bool fileSave();    //保存文件（保存当前文件）
-    bool fileSaveAll(); //保存所有文件
-    void fileClose(int index);   //关闭文件（指定文件）
-    void fileClose();   //关闭文件（当前文件）
-    void fileCloseAll();    //关闭所有文件
+    void currentChanged(int index);
+    void modificationChanged(bool changed);     //文档发生改变
+    void selectionChanged();                    //文档选中状态发生改变
+    void openFile();                            //打开
+    void openFile(QString FileName);            //打开指定文件
+    void newFile();                             //新建
+    bool fileSaveAs(int index);                 //另存为
+    bool fileSave(int index);                   //保存指定文件
+    bool fileSave();                            //保存
+    bool fileSaveAs();                          //另存为
+    bool fileSaveAll();                         //全部保存的
+    void fileClose(int index);                  //关闭指定文件
+    void fileClose();                           //关闭
+    void fileCloseAll();                        //全部关闭
 
-    void textFont(); //设置文本字体
-    void textFontFamily(const QString& font); //设置文本字体（通过字体组合框）
-
-    void judgeToolBars();
+    void judgeToolBars();                       //工具栏显示
+    void textColor();                           //文本颜色控制
+    void textFont();                            //文本字体控制
+    void textFontFamily(const QString& font);   //字体选择框
+    void textSize(const QString &size);         //字号设置
+    void textStyle(int index);
+    void textStyle();
+    void updateTextStyleActs(QString style);
 
 };
 
