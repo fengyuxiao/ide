@@ -7,6 +7,8 @@
 #include <QByteArray>
 #include <QSettings>
 
+#pragma execution_character_set("utf-8")
+
 class Settings : public QObject
 {
     Q_OBJECT

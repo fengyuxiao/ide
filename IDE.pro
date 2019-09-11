@@ -48,3 +48,16 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     images.qrc
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/./ -lqscintilla2_qt5
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/./ -lqscintilla2_qt5d
+else:unix:!macx: LIBS += -L$$PWD/./ -lqscintilla2_qt5
+
+INCLUDEPATH += $$PWD/.
+DEPENDPATH += $$PWD/.
+
+win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/./libqscintilla2_qt5.a
+else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/./libqscintilla2_qt5d.a
+else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/./qscintilla2_qt5.lib
+else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/./qscintilla2_qt5d.lib
+else:unix:!macx: PRE_TARGETDEPS += $$PWD/./libqscintilla2_qt5.a
