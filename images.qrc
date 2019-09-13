@@ -1,22 +1,18 @@
 <RCC>
     <qresource prefix="/">
         <file>images/about.ico</file>
-        <file>images/addT.ico</file>
-        <file>images/cancel.ico</file>
         <file>images/close.ico</file>
         <file>images/compile.ico</file>
         <file>images/compileAll.ico</file>
         <file>images/compileRun.ico</file>
         <file>images/copy.ico</file>
         <file>images/cut.ico</file>
-        <file>images/end.ico</file>
         <file>images/exit.ico</file>
         <file>images/fontType.ico</file>
+        <file>images/gotoLine.ico</file>
         <file>images/help.ico</file>
         <file>images/Logo.ico</file>
         <file>images/new.ico</file>
-        <file>images/nextB.ico</file>
-        <file>images/nextL.ico</file>
         <file>images/open.ico</file>
         <file>images/paste.ico</file>
         <file>images/redo.png</file>
@@ -27,9 +23,8 @@
         <file>images/saveAs.ico</file>
         <file>images/search.ico</file>
         <file>images/select.png</file>
-        <file>images/set.ico</file>
-        <file>images/start.ico</file>
         <file>images/tool.ico</file>
         <file>images/undo.png</file>
+        <file>images/closeFile.ico</file>
     </qresource>
 </RCC>
