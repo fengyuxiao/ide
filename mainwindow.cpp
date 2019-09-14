@@ -5,10 +5,6 @@
 #include <QFontDialog>
 #include <QFontDatabase>
 #include <QFontComboBox>
-#include <QtPrintSupport/QPrinter>
-#include <QtPrintSupport/QPrintDialog>
-#include <QtPrintSupport/QPrintEngine>
-#include <QtPrintSupport/QPrintPreviewDialog>
 #include <QTextEdit>
 #include <QTextStream>
 #include <QTextCharFormat>
@@ -199,9 +195,65 @@ void MainWindow::openFileSlot()                                                 
                     {
                         QString fileNamePro = QFileInfo(fileName).fileName();
                         QsciScintilla *editor = new QsciScintilla;
-                        tabWidget -> setCurrentIndex(tabWidget -> addTab(editor,fileNamePro));
+                        QString fileName = fileNamePro;
+                        tabWidget -> setCurrentIndex(tabWidget -> addTab(editor,fileName));
                         tabWidget -> setCurrentWidget(editor);
                         fileNameVector.append(fileName);
+
+                        QsciLexerCPP *textLexer = new QsciLexerCPP;                                       //创建一个词法分析器
+                        textLexer -> setColor(QColor(Qt:: yellow),QsciLexerCPP::CommentLine);             //设置自带的注释行为绿色
+                        editor -> setLexer(textLexer);                                                    //给QsciScintilla设置词法分析器
+
+                    //代码提示
+                        QsciAPIs *apis = new QsciAPIs(textLexer);
+                        if(!apis ->load(QString(":/api.txt")))
+                        {
+                            QMessageBox::warning(this,QString("提示"),QString("读取文件失败"));
+                        }
+                        else
+                        {
+                            apis->prepare();
+                        }
+
+                        editor -> setAutoCompletionSource(QsciScintilla::AcsAll);                         //设置源，自动补全所有地方出现的
+                        editor -> setAutoCompletionCaseSensitivity(true);                                 //设置自动补全大小写敏感
+                        editor -> setAutoCompletionThreshold(1);                                          //设置每输入一个字符就会出现自动补全的提示
+
+                    //行号显示区域
+                        editor -> setMarginType(0,QsciScintilla::NumberMargin);                           //设置编号为0的页边显示行号。
+                        editor -> setMarginLineNumbers(0,true);                                           //对该页边启用行号
+                        editor -> setMarginWidth(0,20);                                                   //设置页边宽度
+
+                    //自动折叠区域
+                        editor -> setMarginType(3, QsciScintilla::SymbolMargin);
+                        editor -> setMarginLineNumbers(3, false);
+                        editor -> setMarginWidth(3, 15);
+                        editor -> setMarginSensitivity(3, true);
+
+                    //设置自动缩进
+                        editor -> setAutoIndent(true);
+
+                    //显示选中行号
+                        editor -> setCaretLineVisible(true);
+                        editor -> setCaretLineBackgroundColor(Qt::lightGray);
+
+                    //显示行号背景颜色
+                        editor -> setMarginsBackgroundColor(Qt::gray);
+                        editor -> setBraceMatching(QsciScintilla::SloppyBraceMatch);                      //括号匹配
+
+                    //设置编码为UTF-8
+                        editor->SendScintilla(QsciScintilla::SCI_SETCODEPAGE,QsciScintilla::SC_CP_UTF8);
+
+                        QAction *action = new QAction(this);
+                    //设置触发QAction对象的快捷操作.
+
+                        action->setShortcut(Qt::CTRL + Qt::Key_K);
+                    //把这个QAction的对象加入到当前窗口中去.
+
+                        editor->addAction(action);
+                    //连接信号与槽.连接好了以后，当你按下ctrl+s时，就会调用槽函数，也就是这里自定义的messageSlot()函数;
+
+                        connect(action,SIGNAL(triggered()),editor,SLOT(commentSlot()));
                         fileNumber++;
                     }
                 }
@@ -209,9 +261,65 @@ void MainWindow::openFileSlot()                                                 
                 {
                     QString fileNamePro = QFileInfo(fileName).fileName();
                     QsciScintilla *editor = new QsciScintilla;
-                    tabWidget -> setCurrentIndex(tabWidget -> addTab(editor,fileNamePro));
+                    QString fileName = fileNamePro;
+                    tabWidget -> setCurrentIndex(tabWidget -> addTab(editor,fileName));
                     tabWidget -> setCurrentWidget(editor);
                     fileNameVector.append(fileName);
+
+                    QsciLexerCPP *textLexer = new QsciLexerCPP;                                       //创建一个词法分析器
+                    textLexer -> setColor(QColor(Qt:: yellow),QsciLexerCPP::CommentLine);             //设置自带的注释行为绿色
+                    editor -> setLexer(textLexer);                                                    //给QsciScintilla设置词法分析器
+
+                //代码提示
+                    QsciAPIs *apis = new QsciAPIs(textLexer);
+                    if(!apis ->load(QString(":/api.txt")))
+                    {
+                        QMessageBox::warning(this,QString("提示"),QString("读取文件失败"));
+                    }
+                    else
+                    {
+                        apis->prepare();
+                    }
+
+                    editor -> setAutoCompletionSource(QsciScintilla::AcsAll);                         //设置源，自动补全所有地方出现的
+                    editor -> setAutoCompletionCaseSensitivity(true);                                 //设置自动补全大小写敏感
+                    editor -> setAutoCompletionThreshold(1);                                          //设置每输入一个字符就会出现自动补全的提示
+
+                //行号显示区域
+                    editor -> setMarginType(0,QsciScintilla::NumberMargin);                           //设置编号为0的页边显示行号。
+                    editor -> setMarginLineNumbers(0,true);                                           //对该页边启用行号
+                    editor -> setMarginWidth(0,20);                                                   //设置页边宽度
+
+                //自动折叠区域
+                    editor -> setMarginType(3, QsciScintilla::SymbolMargin);
+                    editor -> setMarginLineNumbers(3, false);
+                    editor -> setMarginWidth(3, 15);
+                    editor -> setMarginSensitivity(3, true);
+
+                //设置自动缩进
+                    editor -> setAutoIndent(true);
+
+                //显示选中行号
+                    editor -> setCaretLineVisible(true);
+                    editor -> setCaretLineBackgroundColor(Qt::lightGray);
+
+                //显示行号背景颜色
+                    editor -> setMarginsBackgroundColor(Qt::gray);
+                    editor -> setBraceMatching(QsciScintilla::SloppyBraceMatch);                      //括号匹配
+
+                //设置编码为UTF-8
+                    editor->SendScintilla(QsciScintilla::SCI_SETCODEPAGE,QsciScintilla::SC_CP_UTF8);
+
+                    QAction *action = new QAction(this);
+                //设置触发QAction对象的快捷操作.
+
+                    action->setShortcut(Qt::CTRL + Qt::Key_K);
+                //把这个QAction的对象加入到当前窗口中去.
+
+                    editor->addAction(action);
+                //连接信号与槽.连接好了以后，当你按下ctrl+s时，就会调用槽函数，也就是这里自定义的messageSlot()函数;
+
+                    connect(action,SIGNAL(triggered()),editor,SLOT(commentSlot()));
                     fileNumber++;
                 }
                 QTextStream textStream(&file);
