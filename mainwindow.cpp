@@ -145,14 +145,14 @@ void MainWindow::createInit()                                           //创建
     QAction *action = new QAction(this);
 
 //设置触发QAction对象的快捷操作.
-    action->setShortcut(tr("ctrl+/"));
+    action->setShortcut(Qt::CTRL + Qt::Key_K);
 
 //把这个QAction的对象加入到当前窗口中去.
 
     editor->addAction(action);
 //连接信号与槽.连接好了以后，当你按下ctrl+s时，就会调用槽函数，也就是这里自定义的messageSlot()函数;
 
-    connect(action,SIGNAL(triggered()),editor,SLOT(comment()));
+    connect(action,SIGNAL(triggered()),editor,SLOT(commentSlot()));
 
 
 }
@@ -406,13 +406,13 @@ void MainWindow::newFileSlot()                                                  
     QAction *action = new QAction(this);
 //设置触发QAction对象的快捷操作.
 
-    action->setShortcut(tr("ctrl+/"));
+    action->setShortcut(Qt::CTRL + Qt::Key_K);
 //把这个QAction的对象加入到当前窗口中去.
 
     editor->addAction(action);
 //连接信号与槽.连接好了以后，当你按下ctrl+s时，就会调用槽函数，也就是这里自定义的messageSlot()函数;
 
-    connect(action,SIGNAL(triggered()),editor,SLOT(comment()));
+    connect(action,SIGNAL(triggered()),editor,SLOT(commentSlot()));
 
 }
 
@@ -423,93 +423,114 @@ void MainWindow::createAction()                                                 
 //文件操作定义
     openFileAction = new QAction(QIcon(":/images/open.ico"),tr("打开"),this);
     openFileAction -> setShortcut(QKeySequence::Open);
+    openFileAction -> setStatusTip(tr("打开一个文件"));
     connect(openFileAction,SIGNAL(triggered()),this,SLOT(openFileSlot()));
 
     newFileAction = new QAction(QIcon(":/images/new.ico"),tr("新建"),this);
     newFileAction -> setShortcut(QKeySequence::New);
+    newFileAction -> setStatusTip(tr("新建一个文件"));
     connect(newFileAction,SIGNAL(triggered()),this,SLOT(newFileSlot()));
 
     saveFileAction = new QAction(QIcon(":/images/save.ico"),tr("保存"),this);
     saveFileAction -> setShortcut(QKeySequence::Save);
+    saveFileAction -> setStatusTip(tr("保存当前编辑页的文本到源地址"));
     connect(saveFileAction,SIGNAL(triggered()),this,SLOT(saveFileSlot()));
 
     saveAsFileAction = new QAction(QIcon(":/images/saveAs.ico"),tr("另存为"),this);
     saveAsFileAction -> setShortcut(QKeySequence::SaveAs);
+    saveAsFileAction -> setStatusTip(tr("保存当前编辑页的文本到另一地址"));
     connect(saveAsFileAction,SIGNAL(triggered()),this,SLOT(saveAsFileSlot()));
 
     saveAllFileAction = new QAction(QIcon(":/images/saveAll.ico"),tr("全部保存"),this);
     saveAllFileAction -> setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
+    saveAllFileAction -> setStatusTip(tr("保存所有编辑页的文本"));
     connect(saveAllFileAction,SIGNAL(triggered()),this,SLOT(saveAllFileSlot()));
 
     closeFileAction = new QAction(QIcon(":/images/closeFile.ico"),tr("关闭"),this);
     closeFileAction -> setShortcut(QKeySequence::Close);
+    closeFileAction -> setStatusTip(tr("关闭当前编辑页"));
     connect(closeFileAction,SIGNAL(triggered()),this,SLOT(closeFileSlot()));
 
     closeAllFileAction = new QAction(QIcon(":/images/close.ico"),tr("全部关闭"),this);
     closeAllFileAction -> setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_X);
+    closeAllFileAction -> setStatusTip(tr("关闭所有的编辑页"));
     connect(closeAllFileAction,SIGNAL(triggered()),this,SLOT(closeAllFileSlot()));
 
     exitFileAction = new QAction(QIcon(":/images/exit.ico"),tr("退出"),this);
     exitFileAction -> setShortcut(QKeySequence::Quit);
+    exitFileAction -> setStatusTip(tr("退出当前编辑器"));
     connect(exitFileAction,SIGNAL(triggered()),this,SLOT(close()));
 
 
 //编辑操作定义
     undoAction = new QAction(QIcon(":/images/undo.png"),tr("撤销"),this);
     undoAction -> setShortcut(QKeySequence::Undo);
+    undoAction -> setStatusTip(tr("撤回上一步进行的操作"));
     connect(undoAction,SIGNAL(triggered()),this,SLOT(undoSlot()));
 
     redoAction = new QAction(QIcon(":/images/redo.png"),tr("恢复"),this);
     redoAction -> setShortcut(QKeySequence::Redo);
+    redoAction -> setStatusTip(tr("恢复上一步被撤销的操作"));
     connect(redoAction,SIGNAL(triggered()),this,SLOT(redoSlot()));
 
     copyAction = new QAction(QIcon(":/images/copy.ico"),tr("复制"),this);
     copyAction -> setShortcut(QKeySequence::Copy);
+    copyAction -> setStatusTip(tr("复制选中文本到剪贴板"));
     connect(copyAction,SIGNAL(triggered()),this,SLOT(copySlot()));
 
     cutAction = new QAction(QIcon(":/images/cut.ico"),tr("剪切"),this);
     cutAction -> setShortcut(QKeySequence::Cut);
+    cutAction -> setStatusTip(tr("复制选中文本到剪贴板并删除"));
     connect(cutAction,SIGNAL(triggered()),this,SLOT(cutSlot()));
 
     pasteAction = new QAction(QIcon(":/images/paste.ico"),tr("粘贴"),this);
     pasteAction -> setShortcut(QKeySequence::Paste);
+    pasteAction -> setStatusTip(tr("将剪贴板内的文本粘贴到光标所在位置"));
     connect(pasteAction,SIGNAL(triggered()),this,SLOT(pasteSlot()));
 
     selectAllAction = new QAction(QIcon(":/images/select.png"),tr("全选"),this);
     selectAllAction -> setShortcut(QKeySequence::SelectAll);
+    selectAllAction -> setStatusTip(tr("选中当前编辑页内所有的文本"));
     connect(selectAllAction,SIGNAL(triggered()),this,SLOT(selectAllSlot()));
-
-    goToLineAction = new QAction(QIcon(":/images/gotoLine.ico"),tr("跳转到行"),this);
-    goToLineAction -> setShortcut(Qt::CTRL + Qt::Key_G);
 
 
 //搜索操作定义
     searchAction = new QAction(QIcon(":/images/search.ico"),tr("查找/替换"),this);
+    searchAction -> setStatusTip(tr("查找与输入文本相同的文本的位置并进行替换操作"));
     connect(searchAction,SIGNAL(triggered()),this,SLOT(searchSlot()));
 
 
 //视图操作定义
     toolBarAction = new QAction(QIcon(":/images/tool.ico"),tr("显示工具栏"),this);
+    toolBarAction -> setStatusTip(tr("显示或关闭工具栏"));
     connect(toolBarAction,SIGNAL(triggered()),this,SLOT(judgeToolBars()));
 
 
 //工具操作定义
     compileAction = new QAction(QIcon(":/images/compile.ico"),tr("编译"),this);
     compileAction -> setShortcut(Qt::Key_F9);
+    compileAction -> setStatusTip(tr("对当前编辑页内C语言源码进行编译"));
+    connect(compileAction,SIGNAL(triggered()),this,SLOT(complieSlot()));
 
     runAction = new QAction(QIcon(":/images/run.ico"),tr("运行"),this);
     runAction -> setShortcut(Qt::Key_F10);
+    runAction -> setStatusTip(tr("运行当前编辑页内C语言源码"));
+    connect(runAction,SIGNAL(triggered()),this,SLOT(runSlot()));
 
     compileRunAction = new QAction(QIcon(":/images/compile.ico"),tr("编译运行"),this);
     compileRunAction -> setShortcut(Qt::Key_F11);
+    compileRunAction -> setStatusTip(tr("编译并运行当前编辑页内C语言源码"));
+    connect(compileRunAction,SIGNAL(triggered()),this,SLOT(complieRunSlot()));
 
 
 //帮助操作定义
     helpDocAction = new QAction(QIcon(":/images/help.ico"),tr("帮助文档"),this);
+    helpDocAction -> setStatusTip(tr("展示提示如何操作本软件的文本"));
     connect(helpDocAction,SIGNAL(triggered()),this,SLOT(helpDocSlot()));
 
 
     aboutAction = new QAction(QIcon(":/images/about.ico"),tr("关于"),this);
+    aboutAction -> setStatusTip(tr("展示软件的版本信息及团队介绍"));
     connect(aboutAction,SIGNAL(triggered()),this,SLOT(aboutSlot()));
 
 
@@ -542,8 +563,6 @@ void MainWindow::createMenuBar()                                                
     editMenu -> addAction(cutAction);
     editMenu -> addAction(pasteAction);
     editMenu -> addAction(selectAllAction);
-    editMenu -> addSeparator();
-    editMenu -> addAction(goToLineAction);
 
 
 //搜索菜单
@@ -757,7 +776,7 @@ void MainWindow::searchSlot()                               //查找替换槽函
 
 }
 
-void MainWindow::aboutSlot()                                //关于槽函数
+void MainWindow::aboutSlot()                                    //关于槽函数
 {
     QDialog helpDocWin1;
 
@@ -836,34 +855,51 @@ void MainWindow::helpDocSlot()                              //帮助槽函数
     helpDocShow -> setReadOnly(true);
     helpDocShow -> setFontPointSize(15);
     helpDocShow -> setFontWeight(50);
-    helpDocShow -> setAlignment(Qt::AlignCenter);
     helpDocShow -> setFont(QFont(tr("Cambria")));
 
-    helpDocShow -> append("^_^");
+    helpDocShow -> append("Welcome to our IDE");
+    helpDocShow -> setAlignment(Qt::AlignCenter);
+    helpDocShow -> append("This page can help you to use our product");
+    helpDocShow -> setAlignment(Qt::AlignCenter);
     helpDocShow -> append("");
     helpDocShow -> append("");
-    helpDocShow -> append("Welcome to our IDE:");
+    helpDocShow -> append("文件菜单栏：");
+    helpDocShow -> setAlignment(Qt::AlignLeft);
     helpDocShow -> append("");
-    helpDocShow -> append("We are appreciate that you choose our product.");
+    helpDocShow -> append("打开(Ctrl+O)：打开一个文件或项目");
+    helpDocShow -> append("新建(Ctrl+N)：新建一个文件");
+    helpDocShow -> append("保存(Ctrl+S)：保存当前编辑的文件");
+    helpDocShow -> append("全部保存(Ctrl+Shift+S)：保存当前打开的所有文件");
+    helpDocShow -> append("另存为：将当前正在编辑的文本保存在新的文件中");
+    helpDocShow -> append("关闭(Ctrl+W)：关闭当前正在编辑的文件");
+    helpDocShow -> append("全部关闭(Ctrl+Shift+W)：关闭当前打开的全部文件");
+    helpDocShow -> append("最近打开文件：显示最近所打开过的所有文件");
+    helpDocShow -> append("退出(Ctrl+Q)：退出集成开发环境");
     helpDocShow -> append("");
-    helpDocShow -> append("Our IDE offers text editing ");
+    helpDocShow -> append("编辑菜单栏：");
+    helpDocShow -> append("撤销(Ctrl+Z)：撤销上一步进行的操作");
+    helpDocShow -> append("恢复(Ctrl+Shift+Z)：恢复上一步被撤销的操作");
+    helpDocShow -> append("复制(Ctrl+C)：复制选中的文本到粘贴板");
+    helpDocShow -> append("剪切(Ctrl+X)：将选中的文本添加到粘贴板并从当前移除");
+    helpDocShow -> append("粘贴(Ctrl+V)：将粘贴板中的文本粘贴到光标所在位置");
+    helpDocShow -> append("删除(Del)：删除所选中的文本内容");
+    helpDocShow -> append("全选(Ctrl+A)：选中当前编辑文本中的所有文本");
     helpDocShow -> append("");
-    helpDocShow -> append("and compiling of C Programming Language.");
+    helpDocShow -> append("搜索菜单栏：");
+    helpDocShow -> append("查找(Ctrl+F)：查找与选中或输入文本相同的文本并显示");
+    helpDocShow -> append("替换(Ctrl+H)：将搜索到的文本替换为输入的文本");
     helpDocShow -> append("");
-    helpDocShow -> append("");helpDocShow->append("");
-    helpDocShow -> append("Here are some Tips that may be helpful for you:");
+    helpDocShow -> append("视图菜单栏：");
+    helpDocShow -> append("显示工具栏：显示或关闭工具栏");
     helpDocShow -> append("");
-    helpDocShow -> append("YueHun");
-    helpDocShow -> append("");helpDocShow->append("Xu Zhaoliang");
-    helpDocShow -> append("");helpDocShow->append("Feng Yuxiao");
-    helpDocShow -> append("");helpDocShow->append("Wen GuangBing");
-    helpDocShow -> append("");helpDocShow->append("Lv Jiaming");
-    helpDocShow -> append("");helpDocShow->append("");
-    helpDocShow -> append("");helpDocShow->append("We create this in ths summer of 2019");
-    helpDocShow -> append("");helpDocShow->append("and hope that it can give you some convince.");
-    helpDocShow -> append("");helpDocShow->append("");
-    helpDocShow -> append("Thanks for your interviewing!");
-    helpDocShow -> append("");helpDocShow->append("");helpDocShow->append("");
+    helpDocShow -> append("工具菜单栏：");
+    helpDocShow -> append("编译(F9)：对当前编辑文件中的文本进行编译");
+    helpDocShow -> append("运行(F10)：运行文本中的C语言源代码");
+    helpDocShow -> append("编译运行(F11)：对当前编辑文件中的文本进行编译并运行文本中的源代码");
+    helpDocShow -> append("");
+    helpDocShow -> append("帮助菜单栏：");
+    helpDocShow -> append("帮助文档：打开记录软件使用方法的文档");
+    helpDocShow -> append("关于：打开记录软件版本和团队信息的文档");
 
     helpDocShow->moveCursor(QTextCursor::Start);
 
@@ -872,7 +908,7 @@ void MainWindow::helpDocSlot()                              //帮助槽函数
 
 }
 
-void MainWindow::comment()
+void MainWindow::commentSlot()
 {
     QMessageBox::information(this, "z", "q");
 
@@ -935,5 +971,237 @@ void MainWindow::comment()
 
 //完成记录
     editor -> SendScintilla(QsciScintillaBase::SCI_ENDUNDOACTION);
+
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)                                     //重写关闭事件
+{
+
+    closeAllFileSlot();
+    event -> accept();
+
+}
+
+void MainWindow::complieSlot()
+{
+
+    int index = tabWidget -> currentIndex();
+    file_Name = fileNameVector[index];
+
+    txt1.setWindowTitle(tr("Compile"));
+    txt1.setWindowIcon(QIcon(":/images/Logo.ico"));
+    txt1.resize(600,400);
+    txt1.setMaximumSize(600,400);
+    txt1.setMinimumSize(600,400);
+
+    dealfileName.clear();
+    fileinfo=QFileInfo(file_Name);
+
+//文件名
+    file_name = fileinfo.fileName();
+
+//文件后缀
+    file_suffix = fileinfo.suffix();
+
+//绝对路径
+    file_path = fileinfo.absolutePath();
+
+    qDebug()<<fileinfo;
+    qDebug()<<file_name;
+    qDebug()<<file_suffix;
+    qDebug()<<file_path;
+    if(file_suffix != "c"&&file_suffix != "cpp")
+    {
+        txt1.setText("Error!无法编译此文件!");
+        txt1.show();
+    }
+    else
+    {
+        QStringList name;
+        name=file_Name.split(".");
+        qDebug()<<name;
+        qDebug()<<name[0];
+        dealfileName=name[0].split("/");
+
+        qDebug()<<dealfileName;
+        QString  s = dealfileName.join("\\");
+        qDebug()<<s;
+        QString n="g++ "+s+"."+name[1]+" -o "+s+".exe";
+        qDebug()<<n;
+        const char *cstr;
+
+        QByteArray bytes = n.toLocal8Bit();
+        cstr = bytes.data();
+
+        qDebug()<<cstr;
+        QProcess p;
+        p.start("cmd.exe",QProcess::ReadWrite);
+        p.waitForStarted();
+        p.write(cstr);
+        p.write("\n");
+        p.closeWriteChannel();
+        p.waitForFinished();
+        p.kill();
+        qDebug()<<p.readAllStandardOutput();
+        QByteArray qbt = p.readAllStandardError();
+        QTextCodec* pTextCodec = QTextCodec::codecForName("System");
+        assert(pTextCodec != nullptr);
+        QString msg = pTextCodec->toUnicode(qbt);
+
+
+        qDebug()<<msg;
+        if(msg != nullptr)
+        {
+            txt1.setText(msg);
+            txt1.show();
+        }
+        else
+        {
+            txt1.setText("Success!此文件编译成功!");
+            txt1.show();
+        }
+
+    }
+
+}
+
+void MainWindow::complieRunSlot()
+{
+
+    int index = tabWidget -> currentIndex();
+    file_Name = fileNameVector[index];
+
+    dealfileName.clear();
+    fileinfo = QFileInfo(file_Name);
+
+    txt1.setWindowTitle(tr("compile_and_run"));
+
+//文件名
+    file_name = fileinfo.fileName();
+
+//文件后缀
+    file_suffix = fileinfo.suffix();
+
+//绝对路径
+    file_path = fileinfo.absolutePath();
+    qDebug()<<fileinfo;
+    qDebug()<<file_name;
+    qDebug()<<file_suffix;
+    qDebug()<<file_path;
+
+    txt1.setWindowTitle(tr("Compile"));
+    txt1.setWindowIcon(QIcon(":/images/Logo.ico"));
+
+    if(file_suffix != "c"&&file_suffix != "cpp")
+    {
+        txt1.setText("Sussess!无法编译此文件!");
+        txt1.show();
+    }
+    else
+    {
+        QStringList name;
+        name = file_Name.split(".");
+        qDebug()<<name;
+        qDebug()<<name[0];
+        dealfileName = name[0].split("/");
+
+        qDebug()<<dealfileName;
+        QString  s = dealfileName.join("\\");
+        qDebug()<<s;
+        QString n="g++ "+s+"."+name[1]+" -o "+s+".exe";
+        const char *cstr;
+        QByteArray bytes = n.toLocal8Bit();
+        cstr = bytes.data();
+        qDebug()<<cstr;
+        QString temp = "start "+s+".exe";
+        const char *run_char;
+        QByteArray bytes1 = temp.toLocal8Bit();
+        run_char = bytes1.data();
+        qDebug()<<run_char;
+        QProcess p;
+        p.start("cmd.exe",QProcess::ReadWrite);
+        p.waitForStarted();
+        p.write(cstr);
+        p.write("\n");
+        p.closeWriteChannel();
+        p.waitForFinished();
+        p.kill();
+        qDebug()<<p.readAllStandardOutput();
+
+        QProcess q;
+        q.start("cmd.exe",QProcess::ReadWrite);
+        q.waitForStarted();
+        q.write(run_char);
+        q.write("\n");
+        q.closeWriteChannel();
+        q.waitForFinished();
+        q.kill();
+    }
+
+}
+
+void MainWindow::runSlot()
+{
+
+    int index = tabWidget -> currentIndex();
+    file_Name = fileNameVector[index];
+
+    txt1.setWindowTitle(tr("Compile"));
+    txt1.setWindowIcon(QIcon(":/images/Logo.ico"));
+
+    dealfileName.clear();
+    QStringList name;
+    name = file_Name.split(".");
+    qDebug()<<name;
+    qDebug()<<name[0];
+    dealfileName = name[0].split("/");
+    qDebug()<<dealfileName;
+    QString  s=dealfileName.join("\\");
+    qDebug()<<s;
+    QString n = "dir /a "+s+"."+"exe";
+    qDebug()<<n;
+    const char *cstr;
+    QByteArray bytes = n.toLocal8Bit();
+    cstr = bytes.data();
+    qDebug()<<cstr;
+
+//确认exe文件存在
+    QProcess p;
+    p.start("cmd.exe",QProcess::ReadWrite);
+    p.waitForStarted();
+    p.write(cstr);
+    p.write("\n");
+    p.closeWriteChannel();
+    p.waitForFinished();
+    p.kill();
+    qDebug()<<p.readAllStandardOutput();
+    QByteArray qbt = p.readAllStandardError();
+    QString msg = QString::fromLocal8Bit(qbt);
+    qDebug()<<msg;
+    if(msg != "")
+    {
+        txt1.setText(msg);
+        txt1.show();
+    }
+    else
+    {
+        QString temp = "start "+s+"."+"exe";
+        const char *run_char;
+        QByteArray bytes1 = temp.toLocal8Bit();
+        run_char = bytes1.data();
+        qDebug()<<run_char;
+        QProcess q;
+        q.start("cmd.exe",QProcess::ReadWrite);
+        q.waitForStarted();
+        q.write(run_char);
+        q.write("\n");
+        q.closeWriteChannel();
+        q.waitForFinished();
+        p.kill();
+        qDebug()<<q.readAllStandardOutput();
+        QByteArray qbt = q.readAllStandardError();
+        QString msg = QString::fromLocal8Bit(qbt);
+        qDebug()<<msg;
+    }
 
 }

@@ -5,20 +5,25 @@
 #include <QFile>
 #include <QLabel>
 #include <QEvent>
+#include <string>
 #include <QDebug>
 #include <QAction>
 #include <QMenuBar>
 #include <QToolBar>
+#include <QProcess>
 #include <QShortcut>
 #include <QLineEdit>
 #include <QComboBox>
 #include <QKeyEvent>
 #include <QTabWidget>
 #include <QStatusBar>
+#include <QTextCodec>
+#include <QFileDialog>
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QCloseEvent>
 #include <QMainWindow>
+#include <QMessageBox>
 #include <QActionGroup>
 #include <QFontComboBox>
 #include <QTextCharFormat>
@@ -62,7 +67,14 @@ private:
     void saveAsFile(int index);                                     //另存为实际操作函数
     void closeFile(int index);                                      //关闭文件实际操作函数
 
+    void closeEvent(QCloseEvent *event);                            //重写关闭事件
+
     QVector<QString> fileNameVector;                                //存储对应标签页对应的文件名
+    QString file_Name;
+    QStringList dealfileName;
+    QString file_suffix,file_name,file_path;
+    QFileInfo fileinfo;
+    QMessageBox txt1;
 
 //操作设计
 
@@ -84,7 +96,6 @@ private:
     QAction *cutAction;                             //剪切
     QAction *pasteAction;                           //粘贴
     QAction *selectAllAction;                       //全选
-    QAction *goToLineAction;                        //跳转到行
 
 //搜索菜单操作
     QAction *searchAction;                          //查找替换
@@ -145,7 +156,11 @@ private slots:
     void searchSlot();                                  //查找替换槽函数
     void helpDocSlot();                                 //帮助文档槽函数
 
-    void comment();
+    void commentSlot();
+
+    void runSlot();                                     //运行槽函数
+    void complieSlot();                                 //编译槽函数
+    void complieRunSlot();                              //编译运行槽函数
 
 
 };
