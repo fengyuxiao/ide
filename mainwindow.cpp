@@ -858,23 +858,23 @@ void MainWindow::searchSlot()                               //查找替换槽函
     connect(findNext,&QPushButton::clicked,
             [=]()
             {
-                QString Str = findLine->text();
-                QString allText = editor->text();
-                QString toBeReplace = replaceLine->text();
+                QString Str = findLine -> text();
+                QString allText = EDITOR -> text();
+                QString toBeReplace = replaceLine -> text();
                 qDebug()<<"Str:"<<Str;
                 qDebug()<<"allText:"<<allText;
-                editor->findFirst(Str,true,false,true,true);
+                EDITOR -> findFirst(Str,true,false,true,true);
             }
             );
     connect(replaceThis,&QPushButton::clicked,
             [=]()
             {
-                QString Str = findLine->text();
-                QString allText = editor->text();
-                QString toBeReplace = replaceLine->text();
+                QString Str = findLine -> text();
+                QString allText = EDITOR -> text();
+                QString toBeReplace = replaceLine -> text();
                 qDebug()<<"Str:"<<Str;
                 qDebug()<<"allText:"<<allText;
-                editor -> replace(toBeReplace);
+                EDITOR -> replace(toBeReplace);
             }
             );
 
