@@ -25,5 +25,6 @@
         <file>images/select.png</file>
         <file>images/tool.ico</file>
         <file>images/undo.png</file>
+        <file>images/closeFile.ico</file>
     </qresource>
 </RCC>

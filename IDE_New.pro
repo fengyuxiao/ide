@@ -93,7 +93,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    images.qrc
+    images.qrc \
+    api.qrc
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/./ -lqscintilla2_qt5
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/./ -lqscintilla2_qt5d
