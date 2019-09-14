@@ -5,25 +5,15 @@
 #include <QFile>
 #include <QLabel>
 #include <QEvent>
-#include <string>
-#include <QDebug>
 #include <QAction>
 #include <QMenuBar>
 #include <QToolBar>
-#include <QProcess>
-#include <QShortcut>
-#include <QLineEdit>
 #include <QComboBox>
 #include <QKeyEvent>
 #include <QTabWidget>
 #include <QStatusBar>
-#include <QTextCodec>
-#include <QFileDialog>
-#include <QPushButton>
 #include <QVBoxLayout>
-#include <QCloseEvent>
 #include <QMainWindow>
-#include <QMessageBox>
 #include <QActionGroup>
 #include <QFontComboBox>
 #include <QTextCharFormat>
@@ -31,11 +21,13 @@
 #include <QContextMenuEvent>
 #include <Qsci/qscilexercpp.h>
 #include <Qsci/qsciscintilla.h>
-
-
-#define EDITOR static_cast<QsciScintilla *>(tabWidget->currentWidget())
-
-
+#include<QProcess>
+#include<QFileDialog>
+#include<string>
+#include<QMessageBox>
+#include <QDebug>
+#include<QPushButton>
+#include <QTextCodec>
 class QsciScintilla;
 
 namespace Ui {
@@ -63,19 +55,8 @@ private:
     void hideToolBars();                                            //隐藏工具栏
     void showToolBars();                                            //显示工具栏
 
-    void saveFile(int index);                                       //保存实际操作函数
-    void saveAsFile(int index);                                     //另存为实际操作函数
-    void closeFile(int index);                                      //关闭文件实际操作函数
-
-    void closeEvent(QCloseEvent *event);                            //重写关闭事件
-
-    QVector<QString> fileNameVector;                                //存储对应标签页对应的文件名
-    QString file_Name;
-    QStringList dealfileName;
-    QString file_suffix,file_name,file_path;
-    QFileInfo fileinfo;
-    QMessageBox txt1;
-
+    QStringList openFileName;                                       //存储打开文件的名字
+    QPushButton b1;
 //操作设计
 
 //文件菜单操作
@@ -96,9 +77,15 @@ private:
     QAction *cutAction;                             //剪切
     QAction *pasteAction;                           //粘贴
     QAction *selectAllAction;                       //全选
+    QAction *goToLineAction;                        //跳转到行
+
+//设置菜单操作
+    QAction *fontTypeAction;                        //文本字体设置
+
 
 //搜索菜单操作
-    QAction *searchAction;                          //查找替换
+    QAction *searchAction;                          //查找
+    QAction *replaceAction;                         //替换
 
 //视图菜单操作
     QAction *toolBarAction;                         //工具栏显示
@@ -107,6 +94,8 @@ private:
     QAction *runAction;                             //运行
     QAction *compileAction;                         //编译
     QAction *compileRunAction;                      //编译运行
+    QAction *compileAllAction;                      //全部编译
+
 
 //帮助菜单操作
     QAction *helpDocAction;                         //帮助文档
@@ -115,6 +104,7 @@ private:
 //菜单栏设计
     QMenu *fileMenu;                                //文件菜单
     QMenu *editMenu;                                //编辑菜单
+    QMenu *settingMenu;                             //设置菜单
     QMenu *searchMenu;                              //搜索菜单
     QMenu *viewMenu;                                //视图菜单
     QMenu *toolMenu;                                //工具菜单
@@ -131,37 +121,29 @@ private:
 
 //Qsci编辑区
     QsciScintilla *editor;                          //Qsci编辑区
+//编译
+    QString file_Name;
+    QStringList dealfileName;
+    QString file_suffix,file_name,file_path;
+    QFileInfo fileinfo;
+    QMessageBox txt1;
 
-
+    QMessageBox txt2;
 private slots:
-    void newFileSlot();                                 //新建文件槽函数
-    void openFileSlot();                                //打开文件槽函数
+    void newFile();                                 //新建文件槽函数
 
-    bool saveFileSlot();                                //保存槽函数
-    bool saveAsFileSlot();                              //另存为槽函数
-    bool saveAllFileSlot();                             //全部保存槽函数
-    bool closeFileSlot();                               //关闭文件槽函数
-    bool closeAllFileSlot();                            //全部关闭槽函数
+    bool saveFile();                                //保存槽函数
+    bool saveAsFile();                              //另存为槽函数
 
-    void cutSlot();                                     //剪切槽函数
-    void undoSlot();                                    //撤销槽函数
-    void redoSlot();                                    //恢复槽函数
-    void copySlot();                                    //复制槽函数
-    void pasteSlot();                                   //粘贴槽函数
-    void selectAllSlot();                               //全选槽函数
+    bool saveFile(int index);                       //保存实际操作函数
+    bool saveAsFile(int index);                     //另存为实际操作函数
 
-    void judgeToolBars();                               //工具栏显示
-
-    void aboutSlot();                                   //关于槽函数
-    void searchSlot();                                  //查找替换槽函数
-    void helpDocSlot();                                 //帮助文档槽函数
-
-    void commentSlot();
-
-    void runSlot();                                     //运行槽函数
-    void complieSlot();                                 //编译槽函数
-    void complieRunSlot();                              //编译运行槽函数
-
+    void judgeToolBars();                           //工具栏显示
+//编译
+    void complie();
+    void run();
+    void complie_and_run();
+    void getadress();
 
 };
 
